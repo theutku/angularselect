@@ -1,0 +1,43 @@
+<div     
+    class="trailing-input-container" 
+    [ngClass]="{ 'dropdown-opened' : isSelectionsOpen }"
+    (clickOutside)="clickedOutside($event)"  
+    >
+    <div class="nucobj-selector-container input-group col-md-12">
+        <ul class="nav trailing-input-wizard group-height" autoPosition [positionTarget]="optionsContainer" [containerTarget]="dropdownContainer">
+            <li
+                *ngFor="let item of selectedDisplayItems" 
+                (click)="selectedItemClicked($event, item)"
+                data-toggle="tooltip" data-placement="bottom" title="{{item.typeText}}"
+                [ngClass]="{'done': currentFinalValue}"
+            >
+                <a class="selected-item-display-text" href="#">{{ item.displayText }}</a>
+            </li>
+        </ul>
+        <div class="trailing-input-options-container" #optionsContainer [ngStyle]="{ 'display': !isSelectionsOpen ? 'none' : 'block' }">
+            <div 
+                *ngFor="let dropdownItem of dropdownDisplayItems | trailingInputSearchFilter: inputSearchValue" 
+                (click)="optionSelected($event, dropdownItem)" 
+                class="trailing-input-dropdown-item"
+                [ngClass]="{'select-disabled' : !(dropdownItem.selectable) }"
+            >
+                <div class="trailing-input-display-text">{{dropdownItem.item.displayText}}</div>
+                <div class="type-text-container">
+                    <div class="trailing-input-type-text badge badge-pill badge-info">{{dropdownItem.item.typeText}}</div>
+                </div>
+            </div>
+        </div>
+        <input 
+            #trailingInputComponent 
+            contenteditable="true" 
+            [disabled]="disabled"
+            [(ngModel)]="inputSearchValue"
+            type="text" 
+            [ngStyle]="{ 'cursor' : disabled ? 'not-allowed' : 'auto' }"
+            class="selection-dropdown form-control group-height" 
+            (click)="searchInputClicked($event)" 
+            *ngIf="!currentFinalValue"
+        />
+    </div>
+
+</div>
